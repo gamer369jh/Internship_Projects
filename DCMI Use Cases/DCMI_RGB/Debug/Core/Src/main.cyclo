@@ -1,0 +1,14 @@
+main.c:84:5:main	8
+main.c:220:6:SystemClock_Config	4
+main.c:274:13:SystemPower_Config	2
+main.c:299:13:MX_DCMI_Init	3
+main.c:345:13:MX_GPDMA1_Init	3
+main.c:387:13:MX_ICACHE_Init	3
+main.c:415:13:MX_FMC_Init	2
+main.c:476:13:MX_GPIO_Init	1
+main.c:770:13:MPU_Config	1
+main.c:801:6:HAL_DCMI_FrameEventCallback	1
+main.c:816:17:OV5640_Config	8
+main.c:914:13:Example_Description	1
+main.c:955:6:HAL_GPIO_EXTI_Rising_Callback	1
+main.c:967:6:Error_Handler	1

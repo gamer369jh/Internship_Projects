@@ -1,0 +1,14 @@
+../Core/Src/main.c:84:5:main	16	static
+../Core/Src/main.c:220:6:SystemClock_Config	128	static
+../Core/Src/main.c:274:13:SystemPower_Config	8	static
+../Core/Src/main.c:299:13:MX_DCMI_Init	8	static
+../Core/Src/main.c:345:13:MX_GPDMA1_Init	16	static
+../Core/Src/main.c:387:13:MX_ICACHE_Init	8	static
+../Core/Src/main.c:415:13:MX_FMC_Init	40	static
+../Core/Src/main.c:476:13:MX_GPIO_Init	64	static
+../Core/Src/main.c:770:13:MPU_Config	32	static
+../Core/Src/main.c:801:6:HAL_DCMI_FrameEventCallback	16	static
+../Core/Src/main.c:816:17:OV5640_Config	64	static
+../Core/Src/main.c:914:13:Example_Description	16	static
+../Core/Src/main.c:955:6:HAL_GPIO_EXTI_Rising_Callback	16	static
+../Core/Src/main.c:967:6:Error_Handler	8	static,ignoring_inline_asm

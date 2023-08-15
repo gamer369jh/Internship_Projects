@@ -1,0 +1,11 @@
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_io.c:104:9:BSP_IOEXPANDER_Init	24	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_io.c:141:9:BSP_IOEXPANDER_DeInit	24	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_io.c:177:9:BSP_IO_Init	24	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_io.c:227:9:BSP_IO_DeInit	24	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_io.c:255:9:BSP_IO_GetIT	24	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_io.c:288:9:BSP_IO_ClearIT	24	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_io.c:318:9:BSP_IO_WritePin	32	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_io.c:345:9:BSP_IO_ReadPin	24	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_io.c:380:9:BSP_IO_TogglePin	24	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_io.c:424:6:BSP_IOEXPANDER_ITConfig	48	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_io.c:463:16:MFXSTM32L152_Probe	56	static

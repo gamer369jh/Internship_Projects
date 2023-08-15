@@ -1,0 +1,7 @@
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_sram.c:118:9:BSP_SRAM_Init	24	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_sram.c:161:9:BSP_SRAM_DeInit	24	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_sram.c:194:26:MX_SRAM_BANK1_Init	16	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_sram.c:312:6:BSP_SRAM_IRQHandler	16	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_sram.c:329:13:SRAM_MspInit	64	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_sram.c:442:13:SRAM_MspDeInit	40	static
+../Drivers/BSP/STM32U575I-EV/stm32u575i_eval_sram.c:490:13:BSP_SRAM_ErrorCallback	16	static

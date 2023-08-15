@@ -1,0 +1,2 @@
+../Drivers/BSP/Components/hx8347i/hx8347i_reg.c:44:9:hx8347i_read_reg	32	static
+../Drivers/BSP/Components/hx8347i/hx8347i_reg.c:56:9:hx8347i_write_reg	32	static

@@ -1,0 +1,2 @@
+../Drivers/BSP/Components/cs42l51/cs42l51_reg.c:45:9:cs42l51_read_reg	32	static
+../Drivers/BSP/Components/cs42l51/cs42l51_reg.c:57:9:cs42l51_write_reg	32	static
