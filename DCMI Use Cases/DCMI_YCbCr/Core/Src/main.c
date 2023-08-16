@@ -159,8 +159,25 @@ int main(void)
 
   uint32_t pixelCount = FRAME_BUFFER_SIZE / 2;  // Assuming RGB565 pixel format
   uint16_t *rgbData = (uint16_t *)CAMERA_FRAME_BUFFER;
-  uint8_t *ycrcbData = (uint8_t *)CAMERA_FRAME_BUFFER;  // Buffer for Y-only data
+  uint16_t *ycrcbData = (uint16_t *)CAMERA_FRAME_BUFFER;  // Reuse the same buffer for YCrCb data
 
+
+
+  /* Perform RGB to YCrCb conversion */
+  for (uint32_t i = 0; i < pixelCount; ++i)
+  {
+      uint16_t rgbPixel = rgbData[i];
+
+      uint8_t r = (rgbPixel >> 11) & 0x1F;
+      uint8_t g = (rgbPixel >> 5) & 0x3F;
+      uint8_t b = rgbPixel & 0x1F;
+
+      uint8_t y = (uint8_t)(0.299 * r + 0.587 * g + 0.114 * b);
+      uint8_t cr = (uint8_t)(128 + 0.564 * (b - y));
+      uint8_t cb = (uint8_t)(128 + 0.713 * (r - y));
+
+      ycrcbData[i] = (y << 8) | (cr << 3) | (cb >> 3);
+  }
 
   /* USER CODE END 2 */
 
@@ -168,66 +185,50 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     while (1)
     {
-      /* Perform RGB to YCrCb conversion */
-      for (uint32_t i = 0; i < pixelCount; ++i)
-      {
-          uint16_t rgbPixel = rgbData[i];
+    	 /* Display the continuous grap */
+    		UTIL_LCD_SetFuncDriver(&LCD_Driver);
+    	    BSP_LCD_FillRGBRect(0,0,0,(uint8_t *)ycrcbData,FRAME_WIDTH,FRAME_HEIGHT);
 
-          uint8_t r = (rgbPixel >> 11) & 0x1F;
-          uint8_t g = (rgbPixel >> 5) & 0x3F;
-          uint8_t b = rgbPixel & 0x1F;
+    	    UTIL_LCD_SetBackColor(UTIL_LCD_COLOR_GRAY);
+    	    UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_RED);
+    	    UTIL_LCD_DisplayStringAt(0, 5, (uint8_t *)"YCrCb Format", CENTER_MODE);
 
-          uint8_t y = (uint8_t)(0.299 * r + 0.587 * g + 0.114 * b);
-          uint8_t cr = (uint8_t)(128 + 0.564 * (b - y));
-          uint8_t cb = (uint8_t)(128 + 0.713 * (r - y));
+    	    /* for any Press Check whether the Continuous capture should be suspended or resumed */
+    	    while (UserButtonPressed != RESET)
+    	    {
+    	      if(frame_suspended == 1)
+    	      {
+    	        if(HAL_DCMI_Resume(&hdcmi) != HAL_OK)
+    	        {
+    	          Error_Handler();
+    	        }
+    	        frame_suspended=0;
+    	      }
+    	      else
+    	      {
+    	        if(HAL_DCMI_Suspend(&hdcmi) != HAL_OK)
+    	        {
+    	          Error_Handler();
+    	        }
+    	        frame_suspended++;
+    	      }
+    	      UserButtonPressed = RESET;
+    	    }
+    	    /* Check each time for new frame*/
+    	    if(frame_captured != 0)
+    	    {
+    	      frame_captured = 0;
+    	      BSP_LED_Toggle(LED5);
+    	    }
+    	    else
+    	    {
+    	      BSP_LED_Off(LED5);
+    	    }
+    	    /* USER CODE END WHILE */
 
-          ycrcbData[i] = (y << 8) | (cr << 3) | (cb >> 3);
-      }
-
-      /* Display the continuous grap */
-    UTIL_LCD_SetFuncDriver(&LCD_Driver);
-      BSP_LCD_FillRGBRect(0,0,0,(uint8_t *)ycrcbData,FRAME_WIDTH,FRAME_HEIGHT);
-
-      UTIL_LCD_SetBackColor(UTIL_LCD_COLOR_GRAY);
-      UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_RED);
-      UTIL_LCD_DisplayStringAt(0, 5, (uint8_t *)"YCrCb Format", CENTER_MODE);
-
-      /* for any Press Check whether the Continuous capture should be suspended or resumed */
-      while (UserButtonPressed != RESET)
-      {
-        if(frame_suspended == 1)
-        {
-          if(HAL_DCMI_Resume(&hdcmi) != HAL_OK)
-          {
-            Error_Handler();
-          }
-          frame_suspended=0;
-        }
-        else
-        {
-          if(HAL_DCMI_Suspend(&hdcmi) != HAL_OK)
-          {
-            Error_Handler();
-          }
-          frame_suspended++;
-        }
-        UserButtonPressed = RESET;
-      }
-      /* Check each time for new frame*/
-      if(frame_captured != 0)
-      {
-        frame_captured = 0;
-        BSP_LED_Toggle(LED5);
-      }
-      else
-      {
-        BSP_LED_Off(LED5);
-      }
-      /* USER CODE END WHILE */
-
-      /* USER CODE BEGIN 3 */
-    }
-    /* USER CODE END 3 */
+    	    /* USER CODE BEGIN 3 */
+    	  }
+    	  /* USER CODE END 3 */
 
 }
 

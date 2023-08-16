@@ -156,7 +156,59 @@ int main(void)
    */
   HAL_DCMI_Start_DMA(&hdcmi, DCMI_MODE_CONTINUOUS, (uint32_t)CAMERA_FRAME_BUFFER, FRAME_BUFFER_SIZE);
 
+  uint16_t *rgbData = (uint16_t *)CAMERA_FRAME_BUFFER;
+    uint8_t *yData = (uint8_t *)CAMERA_FRAME_BUFFER;   // Reuse the same buffer for YCrCb data
+ 	  for (uint16_t y = 0; y < FRAME_HEIGHT; y++)
 
+ 	  {
+
+ 	     for (uint16_t x = 0; x < FRAME_WIDTH; x++)
+
+ 	     {
+
+ 	         // Calculate the index for the current pixel in the RGB image data array
+
+ 	         uint32_t pixelIndex = (y * FRAME_WIDTH + x) * 3;
+
+
+
+ 	         // Get the RGB components of the pixel
+
+ 	        uint8_t r = rgbData[pixelIndex];
+
+ 	         uint8_t g = rgbData[pixelIndex + 1];
+
+ 	         uint8_t b = rgbData[pixelIndex + 2];
+
+
+
+ 	         // Convert RGB to YCbCr
+
+ 	         uint8_t yCbCr[3];
+
+ 	         yCbCr[0] = (uint8_t)(0.299 * r + 0.587 * g + 0.114 * b);
+
+ 	         yCbCr[1] = (uint8_t)(-0.1687 * r - 0.3313 * g + 0.5 * b + 128);
+
+ 	         yCbCr[2] = (uint8_t)(0.5 * r - 0.4187 * g - 0.0813 * b + 128);
+
+
+
+ 	         // Extract the Y component
+
+ 	         uint8_t yValue = yCbCr[0];
+
+
+
+ 	         // Store the Y component in the grayscale image data array
+
+ 	         uint32_t grayIndex = y * FRAME_WIDTH + x;
+
+ 	         yData[grayIndex] = yValue;
+
+ 	     }
+
+ 	  }
 
 
 
@@ -164,106 +216,90 @@ int main(void)
 
   /* USER CODE END 2 */
 
-     /* Infinite loop */
-       /* USER CODE BEGIN WHILE */
-       while (1)
-       {
-    	   uint16_t *rgbData = (uint16_t *)CAMERA_FRAME_BUFFER;
-    	   uint8_t *yData = (uint8_t *)CAMERA_FRAME_BUFFER;   // Reuse the same buffer for YCrCb data
-    	   for (uint16_t y = 0; y < FRAME_HEIGHT; y++)
-
-    	        {
-
-    	           for (uint16_t x = 0; x < FRAME_WIDTH; x++)
-
-    	           {
-
-    	               // Calculate the index for the current pixel in the RGB image data array
-
-    	               uint32_t pixelIndex = (y * FRAME_WIDTH + x) * 3;
+ 	  /* Infinite loop */
+ 	  /* USER CODE BEGIN WHILE */
+ 	  while (1)
+ 	  {
 
 
-    	               // Get the RGB components of the pixel
 
-    	              uint8_t r = rgbData[pixelIndex];
-
-    	               uint8_t g = rgbData[pixelIndex + 1];
-
-    	               uint8_t b = rgbData[pixelIndex + 2];
+ 		     /* Display the continuous grap */
+ 		 	UTIL_LCD_SetFuncDriver(&LCD_Driver);
 
 
-    	               // Convert RGB to YCbCr
+ 		 	for (uint16_t y = 0; y < FRAME_HEIGHT; y++)
 
-    	               uint8_t yCbCr[3];
+ 		 	{
 
-    	               yCbCr[0] = (uint8_t)(0.299 * r + 0.587 * g + 0.114 * b);
+ 		 	   for (uint16_t x = 0; x < FRAME_WIDTH; x++)
 
-    	               yCbCr[1] = (uint8_t)(-0.1687 * r - 0.3313 * g + 0.5 * b + 128);
+ 		 	   {
 
-    	               yCbCr[2] = (uint8_t)(0.5 * r - 0.4187 * g - 0.0813 * b + 128);
+ 		 	       // Calculate the index for the current pixel in the grayscale image data array
 
-
-    	               // Extract the Y component
-
-    	               uint8_t yValue = yCbCr[0];
+ 		 	       uint32_t pixelIndex = y * FRAME_WIDTH + x;
 
 
-    	               // Store the Y component in the grayscale image data array
 
-    	               uint32_t grayIndex = y * FRAME_WIDTH + x;
+ 		 	       // Get the grayscale value of the pixel
 
-    	               yData[grayIndex] = yValue;
+ 		 	       uint8_t grayValue = yData[pixelIndex];
 
-    	           }
 
-    	        }
 
-         /* Display the continuous grap */
-       UTIL_LCD_SetFuncDriver(&LCD_Driver);
-         BSP_LCD_FillRGBRect(0,0,0,(uint8_t *)yData,FRAME_WIDTH,FRAME_HEIGHT);
+ 		 	       // Convert the grayscale value to an RGB565 color value
 
-         UTIL_LCD_SetBackColor(UTIL_LCD_COLOR_GRAY);
-         UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_RED);
-         UTIL_LCD_DisplayStringAt(0, 5, (uint8_t *)"YOnly Format", CENTER_MODE);
+ 		 	       uint16_t colorValue = ((grayValue >> 3) << 11) | ((grayValue >> 2) << 5) | (grayValue >> 3);
 
-         /* for any Press Check whether the Continuous capture should be suspended or resumed */
-         while (UserButtonPressed != RESET)
-         {
-           if(frame_suspended == 1)
-           {
-             if(HAL_DCMI_Resume(&hdcmi) != HAL_OK)
-             {
-               Error_Handler();
-             }
-             frame_suspended=0;
-           }
-           else
-           {
-             if(HAL_DCMI_Suspend(&hdcmi) != HAL_OK)
-             {
-               Error_Handler();
-             }
-             frame_suspended++;
-           }
-           UserButtonPressed = RESET;
-         }
-         /* Check each time for new frame*/
-         if(frame_captured != 0)
-         {
-           frame_captured = 0;
-           BSP_LED_Toggle(LED5);
-         }
-         else
-         {
-           BSP_LED_Off(LED5);
-         }
-         /* USER CODE END WHILE */
 
-         /* USER CODE BEGIN 3 */
-       }
-       /* USER CODE END 3 */
 
-}
+ 		 	       // Set the pixel on the LCD
+
+ 		 	       BSP_LCD_WritePixel(0, x, y, colorValue);
+ 		 	   }
+ 		 	}
+
+ 		     UTIL_LCD_SetBackColor(UTIL_LCD_COLOR_GRAY);
+ 		     UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_RED);
+ 		     UTIL_LCD_DisplayStringAt(0, 5, (uint8_t *)"Y-Only Format", CENTER_MODE);
+
+ 	    /* for any Press Check whether the Continuous capture should be suspended or resumed */
+ 	    while (UserButtonPressed != RESET)
+ 	    {
+ 	      if(frame_suspended == 1)
+ 	      {
+ 	        if(HAL_DCMI_Resume(&hdcmi) != HAL_OK)
+ 	        {
+ 	          Error_Handler();
+ 	        }
+ 	        frame_suspended=0;
+ 	      }
+ 	      else
+ 	      {
+ 	        if(HAL_DCMI_Suspend(&hdcmi) != HAL_OK)
+ 	        {
+ 	          Error_Handler();
+ 	        }
+ 	        frame_suspended++;
+ 	      }
+ 	      UserButtonPressed = RESET;
+ 	    }
+ 	    /* Check each time for new frame*/
+ 	    if(frame_captured != 0)
+ 	    {
+ 	      frame_captured = 0;
+ 	      BSP_LED_Toggle(LED5);
+ 	    }
+ 	    else
+ 	    {
+ 	      BSP_LED_Off(LED5);
+ 	    }
+ 	    /* USER CODE END WHILE */
+
+ 	    /* USER CODE BEGIN 3 */
+ 	  }
+ 	  /* USER CODE END 3 */
+ 	}
 
 /**
   * @brief System Clock Configuration

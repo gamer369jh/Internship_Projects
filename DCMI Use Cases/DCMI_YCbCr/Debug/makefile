@@ -68,8 +68,8 @@ all: main-build
 main-build: DCMI_YCrCb.elf secondary-outputs
 
 # Tool invocations
-DCMI_YCrCb.elf DCMI_YCrCb.map: $(OBJS) $(USER_OBJS) C:\Users\LENOVO\Desktop\Internship\ Projects\DCMI\ Use\ Cases\DCMI_YCbCr\STM32U575AIIXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "DCMI_YCrCb.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\Users\LENOVO\Desktop\Internship Projects\DCMI Use Cases\DCMI_YCbCr\STM32U575AIIXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="DCMI_YCrCb.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+DCMI_YCrCb.elf DCMI_YCrCb.map: $(OBJS) $(USER_OBJS) C:\Users\LENOVO\Desktop\Internship\ Projects\Internship_Projects\DCMI\ Use\ Cases\DCMI_YCbCr\STM32U575AIIXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "DCMI_YCrCb.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\Users\LENOVO\Desktop\Internship Projects\Internship_Projects\DCMI Use Cases\DCMI_YCbCr\STM32U575AIIXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="DCMI_YCrCb.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
