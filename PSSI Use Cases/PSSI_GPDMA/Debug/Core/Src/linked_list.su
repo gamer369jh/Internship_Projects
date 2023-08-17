@@ -1,0 +1,2 @@
+../Core/Src/linked_list.c:55:19:MX_PSSIRXQueue_Config	120	static
+../Core/Src/linked_list.c:110:19:MX_PSSITXQueue_Config	120	static

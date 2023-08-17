@@ -42,34 +42,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := DCMI_test_v2
+BUILD_ARTIFACT_NAME := DCMI_RGB
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-DCMI_test_v2.elf \
+DCMI_RGB.elf \
 
 MAP_FILES += \
-DCMI_test_v2.map \
+DCMI_RGB.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-DCMI_test_v2.list \
+DCMI_RGB.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: DCMI_test_v2.elf secondary-outputs
+main-build: DCMI_RGB.elf secondary-outputs
 
 # Tool invocations
-DCMI_test_v2.elf DCMI_test_v2.map: $(OBJS) $(USER_OBJS) /home/gamer369/Desktop/internship/DCMI_test_v2/STM32U575AIIXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "DCMI_test_v2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"/home/gamer369/Desktop/internship/DCMI_test_v2/STM32U575AIIXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="DCMI_test_v2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+DCMI_RGB.elf DCMI_RGB.map: $(OBJS) $(USER_OBJS) C:\Users\Jaafer\ Hosni\Desktop\Internship_Projects\DCMI\ Use\ Cases\DCMI_RGB\STM32U575AIIXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "DCMI_RGB.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\Users\Jaafer Hosni\Desktop\Internship_Projects\DCMI Use Cases\DCMI_RGB\STM32U575AIIXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="DCMI_RGB.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -78,14 +78,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-DCMI_test_v2.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "DCMI_test_v2.list"
+DCMI_RGB.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "DCMI_RGB.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) DCMI_test_v2.elf DCMI_test_v2.list DCMI_test_v2.map default.size.stdout
+	-$(RM) DCMI_RGB.elf DCMI_RGB.list DCMI_RGB.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
